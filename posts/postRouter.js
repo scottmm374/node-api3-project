@@ -1,20 +1,27 @@
-const express = require('express');
+const express = require("express");
+const posts = require("./postDb");
 
-const router = express.Router();
+// const router = express.Router({
+//   mergeParams: true
+// });
 
-router.get('/', (req, res) => {
+// Get all posts?
+router.get("/", (req, res) => {
   // do your magic!
 });
 
-router.get('/:id', (req, res) => {
+// Get specific post?
+router.get("/:id", (req, res) => {
   // do your magic!
 });
 
-router.delete('/:id', (req, res) => {
+// delete post
+router.delete("/:id", (req, res) => {
   // do your magic!
 });
 
-router.put('/:id', (req, res) => {
+// update post
+router.put("/:id", (req, res) => {
   // do your magic!
 });
 
