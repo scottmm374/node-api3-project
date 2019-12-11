@@ -6,19 +6,12 @@ const posts = require("../posts/postDb");
 const router = express.Router();
 
 // * New user create
-router.post("/", (req, res) => {
-  if (!req.body.name) {
-    return res.status(400).json({
-      errorMessage: "Please provide name."
-    });
-  }
-  const newUser = {
-    name: req.body.name
-  };
+router.post("/", validateUser(), (req, res) => {
+  newUser = req.body;
   user
     .insert(newUser)
     .then(data => {
-      return res.status(201).send(newUser);
+      res.status(201).send(newUser);
     })
     .catch(error => {
       res.status(500).json({
@@ -29,25 +22,18 @@ router.post("/", (req, res) => {
 
 // *create new post
 
-router.post("/:id/posts", (req, res) => {
+router.post("/:id/posts", validateUserId(), validatePost(), (req, res) => {
   const newPost = {
     text: req.body.text,
     user_id: req.params.id
   };
-  // if (!req.body.text) {
-  //   return res.status(400).json({
-  //     errorMessage: "Please provide text for post"
-  //   });
-  // }
   posts
     .insert(newPost)
     .then(data => {
-      console.log(data, "data");
-      if (req.body.text) {
-        return res.status(201).send(newPost);
-      }
+      res.status(201).json(data);
     })
     .catch(error => {
+      console.log(error, "Post error");
       res.status(500).json({
         errorMessage: "There was an error while saving the post to the database"
       });
@@ -90,19 +76,11 @@ router.get("/:id/posts", (req, res) => {
 
 //  * delete user
 
-router.delete("/:id", (req, res) => {
-  const id = req.params.id;
-  user.getById(id).then(data => {
-    if (!data) {
-      return res.status(404).json({ message: "The User Id does not exist" });
-    }
-  });
+router.delete("/:id", validateUserId(), (req, res) => {
   user
-    .remove(id)
-    .then(data => {
-      if (data) {
-        res.status(200).json({ message: "user deleted" });
-      }
+    .remove(req.data.id)
+    .then(() => {
+      res.status(200).json({ message: "user deleted" });
     })
     .catch(err => {
       res.status(500).json({ error: "The user could not be removed" });
@@ -162,19 +140,26 @@ function validateUserId() {
   };
 }
 
-function validateUser(req, res, next) {
-  // do your magic!
+function validateUser() {
+  return (req, res, next) => {
+    if (!req.body.name) {
+      return res.status(400).json({
+        errorMessage: "Please provide name."
+      });
+    }
+    next();
+  };
 }
 
-// function validatePost(){
-//   return (req, res, next) => {
-
-//   if (!req.body.text) {
-//     return res.status(400).json({
-//       errorMessage: "Please provide text for post"
-//     });
-//   }
-//   next();
-// }
+function validatePost() {
+  return (req, res, next) => {
+    if (!req.body.text) {
+      return res.status(400).json({
+        errorMessage: "Please provide text for post"
+      });
+    }
+    next();
+  };
+}
 
 module.exports = router;
