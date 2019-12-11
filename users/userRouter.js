@@ -34,6 +34,25 @@ router.post("/:id/posts", (req, res) => {
     text: req.body.text,
     user_id: req.params.id
   };
+  if (!req.body.text) {
+    return res.status(400).json({
+      errorMessage: "Please provide text for post"
+    });
+  }
+
+  posts
+    .insert(newPost)
+    .then(data => {
+      console.log(data, "data");
+      if (req.body.text) {
+        return res.status(201).send(newPost);
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        errorMessage: "There was an error while saving the post to the database"
+      });
+    });
 });
 
 //  *Get all users
