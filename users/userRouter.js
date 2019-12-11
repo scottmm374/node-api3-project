@@ -27,19 +27,18 @@ router.post("/", (req, res) => {
     });
 });
 
-// create new post ?
+// *create new post
 
 router.post("/:id/posts", (req, res) => {
   const newPost = {
     text: req.body.text,
     user_id: req.params.id
   };
-  if (!req.body.text) {
-    return res.status(400).json({
-      errorMessage: "Please provide text for post"
-    });
-  }
-
+  // if (!req.body.text) {
+  //   return res.status(400).json({
+  //     errorMessage: "Please provide text for post"
+  //   });
+  // }
   posts
     .insert(newPost)
     .then(data => {
@@ -68,20 +67,8 @@ router.get("/", (req, res) => {
 });
 
 // * Get user by ID
-router.get("/:id", (req, res) => {
-  const id = req.params.id;
-  user
-    .getById(id)
-    .then(data => {
-      if (!data) {
-        return res.status(400).json("No user found");
-      } else {
-        return res.status(200).send(data);
-      }
-    })
-    .catch(err => {
-      res.status(500).json("something went wrong");
-    });
+router.get("/:id", validateUserId(), (req, res) => {
+  res.status(200).json(req.data);
 });
 
 // * Get all user posts by userId
@@ -101,7 +88,7 @@ router.get("/:id/posts", (req, res) => {
     });
 });
 
-//  * delete user?
+//  * delete user
 
 router.delete("/:id", (req, res) => {
   const id = req.params.id;
@@ -122,7 +109,7 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-// * Update User?
+// * Update User
 router.put("/:id", (req, res) => {
   const updateUser = {
     name: req.body.name
@@ -157,16 +144,37 @@ router.put("/:id", (req, res) => {
 
 // custom middleware
 
-function validateUserId(req, res, next) {
-  // do your magic!
+function validateUserId() {
+  return (req, res, next) => {
+    user
+      .getById(req.params.id)
+      .then(data => {
+        if (data) {
+          req.data = data;
+          next();
+        } else {
+          res.status(400).json("No user found");
+        }
+      })
+      .catch(err => {
+        res.status(500).json("something went wrong");
+      });
+  };
 }
 
 function validateUser(req, res, next) {
   // do your magic!
 }
 
-function validatePost(req, res, next) {
-  // do your magic!
-}
+// function validatePost(){
+//   return (req, res, next) => {
+
+//   if (!req.body.text) {
+//     return res.status(400).json({
+//       errorMessage: "Please provide text for post"
+//     });
+//   }
+//   next();
+// }
 
 module.exports = router;
