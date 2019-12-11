@@ -4,18 +4,14 @@ const posts = require("../posts/postDb");
 // const postRouter = require("../posts/postRouter");
 
 const router = express.Router();
-// const router = express.Router({
-//   mergeParams: true
-// });
 
-// New user create ?
-
+// * New user create
 router.post("/", (req, res) => {
-  // if (!req.body.name) {
-  //   return res.status(400).json({
-  //     errorMessage: "Please provide name."
-  //   });
-  // }
+  if (!req.body.name) {
+    return res.status(400).json({
+      errorMessage: "Please provide name."
+    });
+  }
   const newUser = {
     name: req.body.name
   };
@@ -34,7 +30,10 @@ router.post("/", (req, res) => {
 // create new post ?
 
 router.post("/:id/posts", (req, res) => {
-  // const newPost()
+  const newPost = {
+    text: req.body.text,
+    user_id: req.params.id
+  };
 });
 
 //  *Get all users
@@ -52,7 +51,6 @@ router.get("/", (req, res) => {
 // * Get user by ID
 router.get("/:id", (req, res) => {
   const id = req.params.id;
-  // console.log("user id", id);
   user
     .getById(id)
     .then(data => {
@@ -105,7 +103,7 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-// Update User?
+// * Update User?
 router.put("/:id", (req, res) => {
   const updateUser = {
     name: req.body.name
