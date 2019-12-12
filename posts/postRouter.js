@@ -3,7 +3,7 @@ const posts = require("./postDb");
 
 const router = express.Router();
 
-router.get("/posts", (req, res) => {
+router.get("/", (req, res) => {
   posts
     .find()
     .then(data => {
