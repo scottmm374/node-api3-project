@@ -18,7 +18,10 @@ function logger(req, res, next) {
 }
 
 server.get("/", (req, res) => {
-  res.send(`<h2>Let's write some middleware!</h2>`);
+  res.json({
+    message: "Welcome to my API",
+    cohort: process.env.LAMBDA_COHORT
+  });
 });
 
 module.exports = server;

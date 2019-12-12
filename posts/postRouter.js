@@ -1,24 +1,27 @@
-// const express = require("express");
-// const posts = require("./postDb");
+const express = require("express");
 
-// router.get("/posts", (req, res) => {});
+const router = express.Router();
 
-// router.get("/:id/posts", (req, res) => {});
+router.get("/", (req, res) => {
+  // do your magic!
+});
 
-// // delete post
-// router.delete("/:id", (req, res) => {
-//   // do your magic!
-// });
+router.get("/:id", (req, res) => {
+  // do your magic!
+});
 
-// // update post
-// router.put("/:id", (req, res) => {
-//   // do your magic!
-// });
+router.delete("/:id", (req, res) => {
+  // do your magic!
+});
 
-// // custom middleware
+router.put("/:id", (req, res) => {
+  // do your magic!
+});
 
-// function validatePostId(req, res, next) {
-//   // do your magic!
-// }
+// custom middleware
 
-// module.exports = router;
+function validatePostId(req, res, next) {
+  // do your magic!
+}
+
+module.exports = router;
