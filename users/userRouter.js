@@ -6,7 +6,7 @@ const posts = require("../posts/postDb");
 const router = express.Router();
 
 // * New user create
-router.post("/user", validateUser(), (req, res) => {
+router.post("/", validateUser(), (req, res) => {
   newUser = req.body;
   user
     .insert(newUser)
@@ -22,7 +22,7 @@ router.post("/user", validateUser(), (req, res) => {
 
 // *create new post
 
-router.post("/user/:id/posts", validateUserId(), validatePost(), (req, res) => {
+router.post("/:id/posts", validateUserId(), validatePost(), (req, res) => {
   const newPost = {
     text: req.body.text,
     user_id: req.params.id
@@ -42,7 +42,7 @@ router.post("/user/:id/posts", validateUserId(), validatePost(), (req, res) => {
 });
 
 //  *Get all users
-router.get("/user", (req, res) => {
+router.get("/", (req, res) => {
   user
     .get()
     .then(users => {
@@ -54,12 +54,12 @@ router.get("/user", (req, res) => {
 });
 
 // * Get user by ID
-router.get("/user/:id", validateUserId(), (req, res) => {
+router.get("/:id", validateUserId(), (req, res) => {
   res.status(200).json(req.user);
 });
 
 // * Get all user posts by userId
-router.get("/user/:id/posts", validateUserId(), (req, res) => {
+router.get("/:id/posts", validateUserId(), (req, res) => {
   user.getUserPosts(req.user.id).then(userPosts => {
     return res.status(200).json(userPosts);
   });
@@ -67,14 +67,14 @@ router.get("/user/:id/posts", validateUserId(), (req, res) => {
 
 //  * delete user
 
-router.delete("/user/:id", validateUserId(), (req, res) => {
+router.delete("/:id", validateUserId(), (req, res) => {
   user.remove(req.user.id).then(() => {
     res.status(200).json({ message: "user deleted" });
   });
 });
 
 // * Update User
-router.put("/user/:id", validateUserId(), validateUser(), (req, res) => {
+router.put("/:id", validateUserId(), validateUser(), (req, res) => {
   updateUser = req.body;
   user.update(req.user.id, updateUser).then(() => {
     res.status(200).json(updateUser);
