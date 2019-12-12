@@ -1,7 +1,7 @@
 const express = require("express");
 const posts = require("./postDb");
-
 const router = express.Router();
+const { validatePost } = require("../users/userRouter");
 
 router.get("/", (req, res) => {
   posts
@@ -60,28 +60,27 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", validatePostId(), validatePost(), (req, res) => {
   const updatePost = {
     text: req.body.text,
     user_id: req.params.id
   };
-  const id = req.params.id;
+  // const id = req.params.id;
 
-  posts.getById(id).then(data => {
-    if (!data) {
-      return res
-        .status(404)
-        .json({ message: "The post with the specified ID does not exist." });
-    }
+  posts.getById(req.post.id).then(data => {
+    // if (!data) {
+    //   return res
+    res.status(404).json(req.post);
+    // }
 
-    if (!req.body.text) {
-      return res.status(400).json({
-        errorMessage: "Please provide title and contents for the post."
-      });
-    }
+    // if (!req.body.text) {
+    //   return res.status(400).json({
+    //     errorMessage: "Please provide text for the post."
+    //   });
+    // }
 
     posts
-      .update(id, updatePost)
+      .update(req.post.id, updatePost)
       .then(data => {
         res.status(200).send(updatePost);
       })
@@ -95,8 +94,24 @@ router.put("/:id", (req, res) => {
 
 // custom middleware
 
-function validatePostId(req, res, next) {
-  // do your magic!
+function validatePostId() {
+  return (req, res, next) => {
+    posts
+      .getById(req.params.id)
+      .then(data => {
+        if (data) {
+          req.post = data;
+          next();
+        } else {
+          res.status(400).json({ message: "invalid post id" });
+        }
+      })
+      .catch(err => {
+        res.status(500).json({
+          message: "There was an error performing the required operation"
+        });
+      });
+  };
 }
 
 module.exports = router;

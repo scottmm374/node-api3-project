@@ -138,4 +138,7 @@ function validatePost() {
   };
 }
 
-module.exports = router;
+module.exports = {
+  router,
+  validatePost
+};
