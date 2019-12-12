@@ -60,37 +60,38 @@ router.delete("/:id", (req, res) => {
     });
 });
 
-router.put("/:id", validatePostId(), validatePost(), (req, res) => {
-  const updatePost = {
-    text: req.body.text,
-    user_id: req.params.id
-  };
-  // const id = req.params.id;
+// router.put("/:id", validatePostId(), validatePost(), (req, res) => {
+//   const updatePost = req.body;
+//   // {
+//   //   text: req.body.text,
+//   //   user_id: req.params.id
+//   // };
+//   // const id = req.params.id;
 
-  posts.getById(req.post.id).then(data => {
-    // if (!data) {
-    //   return res
-    res.status(404).json(req.post);
-    // }
+//   posts.getById(req.post.id).then(data => {
+//     // if (!data) {
+//     //   return res
+//     res.status(404).json(req.post);
+//     // }
 
-    // if (!req.body.text) {
-    //   return res.status(400).json({
-    //     errorMessage: "Please provide text for the post."
-    //   });
-    // }
+//     // if (!req.body.text) {
+//     //   return res.status(400).json({
+//     //     errorMessage: "Please provide text for the post."
+//     //   });
+//     // }
 
-    posts
-      .update(req.post.id, updatePost)
-      .then(data => {
-        res.status(200).send(updatePost);
-      })
-      .catch(error => {
-        res.status(500).json({
-          error: "The post information could not be modified."
-        });
-      });
-  });
-});
+//     posts
+//       .update(req.post.id, updatePost)
+//       .then(data => {
+//         res.status(200).send(updatePost);
+//       })
+//       .catch(error => {
+//         res.status(500).json({
+//           error: "The post information could not be modified."
+//         });
+//       });
+//   });
+// });
 
 // custom middleware
 
