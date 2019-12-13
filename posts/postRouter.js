@@ -1,7 +1,7 @@
 const express = require("express");
 const posts = require("./postDb");
 const router = express.Router();
-const { validatePost } = require("../users/userRouter");
+// const { validatePost } = require("../users/userRouter");
 
 router.get("/", (req, res) => {
   posts
@@ -93,26 +93,26 @@ router.delete("/:id", (req, res) => {
 //   });
 // });
 
-// custom middleware
+// // custom middleware
 
-function validatePostId() {
-  return (req, res, next) => {
-    posts
-      .getById(req.params.id)
-      .then(data => {
-        if (data) {
-          req.post = data;
-          next();
-        } else {
-          res.status(400).json({ message: "invalid post id" });
-        }
-      })
-      .catch(err => {
-        res.status(500).json({
-          message: "There was an error performing the required operation"
-        });
-      });
-  };
-}
+// function validatePostId() {
+//   return (req, res, next) => {
+//     posts
+//       .getById(req.params.id)
+//       .then(data => {
+//         if (data) {
+//           req.post = data;
+//           next();
+//         } else {
+//           res.status(400).json({ message: "invalid post id" });
+//         }
+//       })
+//       .catch(err => {
+//         res.status(500).json({
+//           message: "There was an error performing the required operation"
+//         });
+//       });
+//   };
+// }
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const express = require("express");
-const userRouter = require("./users/userRouter");
+const { router: userRouter } = require("./users/userRouter");
 const postRouter = require("./posts/postRouter");
 
 const server = express();
